@@ -8,6 +8,7 @@
 
 -> you now should have a structure like that:
 
+```
 zammad-dev/         
 │
 ├─ docker-compose.yml
@@ -19,6 +20,7 @@ zammad-dev/
     ├─ config/
     ├─ docker/
     ├─ ...
+```
 
 - copy `Dockerfile.dev` from this repo to the zammand source dir you checked out before
 - copy `zammad.dev.conf` from this repo to `zammad\docker\nginx` (where again `zammad` is the source dir you checked out before)

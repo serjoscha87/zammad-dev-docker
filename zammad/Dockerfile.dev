@@ -1,0 +1,47 @@
+# Dockerfile.dev 
+FROM ruby:3.4.7-trixie
+
+# Systemabhängigkeiten
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    build-essential \
+    libpq-dev \
+    pkg-config \
+    libimlib2-dev \
+    libxml2-dev \
+    libxslt-dev \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Node.js LTS
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs git build-essential libpq-dev curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Yarn via Corepack aktivieren
+RUN corepack enable
+RUN corepack prepare yarn@stable --activate
+
+RUN gem install bundler:2.6.9
+
+WORKDIR /usr/src/zammad
+
+# Gems installieren (später über Volume überschrieben)
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# Webpack für Frontend
+# Frontend befindet sich im Unterordner
+WORKDIR /usr/src/zammad/app/frontend
+COPY app/frontend/package.json ./
+RUN yarn install
+
+# Danach wieder zurück ins Rails-Hauptverzeichnis
+WORKDIR /usr/src/zammad
+
+# Entwicklungsmodus
+ENV RAILS_ENV=development
+
+#CMD ["bash", "-c", "bundle install && yarn install && rails s -b 0.0.0.0 -p 3000"]
+CMD ["bash", "-c", "bundle exec rails s -b 0.0.0.0 -p 3000 & cd app/frontend && yarn dev"]

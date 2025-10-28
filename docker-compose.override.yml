@@ -1,0 +1,26 @@
+services:
+  rails:
+    environment:
+      RAILS_LOG_TO_STDOUT: "true"
+      WEBPACK_DEV_SERVER: "true"
+    volumes:
+      - ./zammad:/usr/src/zammad:cached
+      - bundle_cache:/usr/local/bundle
+      - node_modules:/usr/src/zammad/node_modules
+    command: bash -c "
+      bundle install &&
+      yarn install --check-files &&
+      ./bin/webpack-dev-server --host 0.0.0.0 --port 3035 & 
+      rails s -b 0.0.0.0 -p 3000"
+    ports:
+      - "3000:3000"
+      - "3035:3035"
+
+  websocket:
+    volumes:
+      - ./zammad:/usr/src/zammad:cached
+    command: bash -c "bundle exec script/websocket-server.rb start"
+
+volumes:
+  bundle_cache:
+  node_modules:

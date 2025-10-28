@@ -2,9 +2,9 @@
 
 ### Quick Steps:
 
-- create a dir that you can later checkout the zammad source to (name does not matter)
-- put `docker-compose.override.yml` & `docker-compose.yml` for this repo to that new dir
-- `git clone` the zammand source into the same dir next to the `docker-compose.override.yml` / `docker-compose.yml` (git clone https://github.com/zammad/zammad)
+- create a new dir somewhere that you can later checkout the zammad source to (name does not matter)
+- put `docker-compose.override.yml` & `docker-compose.yml` from this repo to that new dir
+- `git clone` the zammand source into the dir next to the `docker-compose.override.yml` / `docker-compose.yml` (`git clone https://github.com/zammad/zammad`)
 
 -> you now should have a structure like that:
 
